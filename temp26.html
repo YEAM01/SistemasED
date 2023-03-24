@@ -1,0 +1,79 @@
+<html> 
+<head>
+
+	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="raphael-2.1.4.min.js"></script>
+<script src="justgage.js"></script>
+
+<script>
+	//variables
+var accessToken = "ccef64084f45fe6a4b8b95f7b73e93e0c2757fac";
+var deviceID = "36001f000247363339343638"
+var url = "https://api.particle.io/v1/devices/" + deviceID + "/gradosC";  //es el url con la variable que voy a mandar llamar gradosC
+
+function callback(data, status){
+	if (status == "success") {
+		temp = parseFloat(data.result);
+		temp = temp.toFixed(2);
+		g.refresh(temp);
+		setTimeout(getReading, 1000);
+	}
+
+	else {
+		alert("There was a problem");
+	}
+}
+
+
+function getReading(){ //construye nuestro link
+   	$.get(url, {access_token: accessToken}, callback); //se construye el http se manda y si es exitosa se trae el json
+}
+</script>
+
+
+
+
+<style>
+	.container {
+	  display: flex;
+	  justify-content: center;
+	}
+
+#gauge{
+
+width: 850px;
+height: 850px;
+display: inline-block;
+
+}
+
+  </style>
+
+</head>	
+
+<body style="background: linear-gradient(to bottom, #0e62a7, #ffffff);">
+<div class="container">
+	
+<div id="gauge" class="200x160px" ></div>
+
+	</div>
+
+
+<script>
+var g = new JustGage({  //grafica lo manda cada segundo
+    id: "gauge",
+    value: 0,
+    min: 0,
+    max: 400,
+    title: "Temperatura (C)",
+	titleFontColor: "blue"
+});
+getReading();
+</script>
+
+
+</body>
+
+
+</html>
